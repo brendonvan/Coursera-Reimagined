@@ -31,7 +31,7 @@ export default function Sidebar({ course, activeLessonId, onSelectLesson, mobile
           alt="Coursera Reimagined"
           width={250}
           height={63}
-          className="relative object-contain"
+          className="relative object-contain w-auto h-auto"
           priority
         />
       </div>
