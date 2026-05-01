@@ -5,9 +5,10 @@ import { ChatMessage } from '@/types';
 
 interface ChatPanelProps {
   lessonId: string;
+  mobile?: boolean;
 }
 
-export default function ChatPanel({ lessonId }: ChatPanelProps) {
+export default function ChatPanel({ lessonId, mobile }: ChatPanelProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +71,10 @@ export default function ChatPanel({ lessonId }: ChatPanelProps) {
   }
 
   return (
-    <aside className="w-96 shrink-0 border-l border-[#1F2937] flex flex-col bg-[#091A2F]">
+    <aside className={mobile
+      ? 'w-full flex flex-col bg-[#091A2F]'
+      : 'w-96 shrink-0 border-l border-[#1F2937] flex flex-col bg-[#091A2F]'
+    }>
       {/* Header */}
       <div className="p-4 border-b border-[#1F2937]">
         <h2 className="font-semibold text-[#E5E7EB]">AI Course Tutor</h2>

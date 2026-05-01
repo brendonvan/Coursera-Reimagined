@@ -7,11 +7,15 @@ interface SidebarProps {
   course: Course;
   activeLessonId: string;
   onSelectLesson: (lesson: Lesson) => void;
+  mobile?: boolean;
 }
 
-export default function Sidebar({ course, activeLessonId, onSelectLesson }: SidebarProps) {
+export default function Sidebar({ course, activeLessonId, onSelectLesson, mobile }: SidebarProps) {
   return (
-    <aside className="w-72 shrink-0 border-r border-[#1F2937] flex flex-col overflow-hidden bg-[#091A2F]">
+    <aside className={mobile
+      ? 'w-full flex flex-col overflow-hidden bg-[#091A2F]'
+      : 'w-72 shrink-0 border-r border-[#1F2937] flex flex-col overflow-hidden bg-[#091A2F]'
+    }>
       {/* Logo + course title */}
       <div className="relative flex flex-col items-center border-b border-[#1F2937] overflow-hidden">
         {/* Glow: originates top-left, fades to transparent bottom-right */}
