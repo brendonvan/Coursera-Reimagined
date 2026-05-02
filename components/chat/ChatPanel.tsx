@@ -39,13 +39,16 @@ export default function ChatPanel({ lessonId, mobile }: ChatPanelProps) {
         body: JSON.stringify({ message: text, lessonId }),
       });
       const data = await res.json();
+      const content = res.ok
+        ? (data.reply ?? 'No response generated.')
+        : (data.error ?? 'Something went wrong. Please try again.');
 
       const assistantMsg: ChatMessage = {
         id: String(Date.now() + 1),
         role: 'assistant',
-        content: data.reply,
+        content,
         timestamp: new Date(),
-        citations: data.citations,
+        citations: res.ok ? data.citations : undefined,
       };
       setMessages((prev) => [...prev, assistantMsg]);
     } catch {

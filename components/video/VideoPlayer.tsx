@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
+import YouTubePlayer from './YouTubePlayer';
 
 interface VideoPlayerProps {
   videoUrl?: string;
@@ -10,19 +11,20 @@ interface VideoPlayerProps {
 
 export default function VideoPlayer({ videoUrl, onTimeUpdate, seekTo }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isYouTube = videoUrl?.includes('youtube.com/embed/');
 
   useEffect(() => {
-    if (videoRef.current && seekTo !== undefined) {
+    if (!isYouTube && videoRef.current && seekTo !== undefined) {
       videoRef.current.currentTime = seekTo;
-      videoRef.current.play().catch(() => {
-        // Autoplay may be blocked — user can press play manually
-      });
+      videoRef.current.play().catch(() => {});
     }
-  }, [seekTo]);
+  }, [seekTo, isYouTube]);
 
   return (
     <div className="bg-black w-full aspect-video flex items-center justify-center shrink-0">
-      {videoUrl ? (
+      {isYouTube && videoUrl ? (
+        <YouTubePlayer videoUrl={videoUrl} onTimeUpdate={onTimeUpdate} seekTo={seekTo} />
+      ) : videoUrl ? (
         <video
           ref={videoRef}
           src={videoUrl}
