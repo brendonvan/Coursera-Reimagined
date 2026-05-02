@@ -1,3 +1,17 @@
 node_modules
-CLAUDE.md
+.next
+out
+
+# env files
+.env
+.env.local
+.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# misc
+*.log
 .claude
+CLAUDE.md
