@@ -82,6 +82,31 @@ export async function storeCourse(input: {
   return { id: data.id, title: data.title, playlistId: data.playlist_id };
 }
 
+export async function getCourseByPlaylistId(playlistId: string): Promise<Course | null> {
+  const { data, error } = await supabase
+    .from('courses')
+    .select(`id, title, lessons ( id, video_id, title, duration, position )`)
+    .eq('playlist_id', playlistId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+
+  return {
+    id: data.id,
+    title: data.title,
+    lessons: ((data.lessons as {
+      id: string; video_id: string; title: string; duration: string; position: number;
+    }[]) ?? [])
+      .sort((a, b) => a.position - b.position)
+      .map((l): Lesson => ({
+        id: l.id,
+        title: l.title,
+        duration: l.duration,
+        videoUrl: `https://www.youtube.com/embed/${l.video_id}`,
+      })),
+  };
+}
+
 export async function getCourses(): Promise<Course[]> {
   const { data, error } = await supabase
     .from('courses')

@@ -90,7 +90,7 @@ export default function HomePage() {
 
         {/* Mobile tab bar */}
         <nav className="flex shrink-0 border-b border-[#1F2937] lg:hidden">
-          {(['transcript', 'lessons', 'chat'] as MobileTab[]).map((tab) => (
+          {(['lessons', 'transcript', 'chat'] as MobileTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

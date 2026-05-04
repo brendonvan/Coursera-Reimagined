@@ -7,7 +7,7 @@ import {
   extractPlaylistId,
   secondsToTimeString,
 } from '@/lib/youtube';
-import { storeCourse, storeLesson, storeChunk } from '@/lib/db';
+import { storeCourse, storeLesson, storeChunk, getCourseByPlaylistId } from '@/lib/db';
 import { embedText } from '@/lib/ai';
 import { Course, Lesson } from '@/types';
 
@@ -39,6 +39,15 @@ export async function POST(req: NextRequest) {
 
         // Fetch playlist metadata
         const playlistId = extractPlaylistId(url);
+
+        // Return existing course immediately if already ingested
+        const existing = await getCourseByPlaylistId(playlistId);
+        if (existing) {
+          send({ type: 'complete', courseId: existing.id, course: existing });
+          controller.close();
+          return;
+        }
+
         const [videos, title] = await Promise.all([
           getPlaylistVideos(url),
           getPlaylistTitle(playlistId),
