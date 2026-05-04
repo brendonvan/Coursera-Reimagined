@@ -110,13 +110,14 @@ export async function getCourseByPlaylistId(playlistId: string): Promise<Course 
 export async function getCourses(): Promise<Course[]> {
   const { data, error } = await supabase
     .from('courses')
-    .select(`id, title, lessons ( id, video_id, title, duration, position )`)
+    .select(`id, title, playlist_id, lessons ( id, video_id, title, duration, position )`)
     .order('created_at', { ascending: false });
   if (error) throw error;
 
   return (data ?? []).map((course) => ({
     id: course.id,
     title: course.title,
+    playlistId: course.playlist_id,
     lessons: ((course.lessons as {
       id: string; video_id: string; title: string; duration: string; position: number;
     }[]) ?? [])

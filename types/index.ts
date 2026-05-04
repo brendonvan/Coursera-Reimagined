@@ -8,6 +8,7 @@ export interface Lesson {
 export interface Course {
   id: string;
   title: string;
+  playlistId?: string;
   lessons: Lesson[];
 }
 

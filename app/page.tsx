@@ -15,18 +15,22 @@ export default function HomePage() {
   const [lessonChunks, setLessonChunks] = useState<TranscriptChunk[]>([]);
   const [currentTime, setCurrentTime] = useState(0);
   const [seekTo, setSeekTo] = useState<number | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<MobileTab>('transcript');
+  const [activeTab, setActiveTab] = useState<MobileTab>('lessons');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load most recent course on mount
+  // Load preferred course on mount (falls back to most recent)
   useEffect(() => {
+    const defaultPlaylistId = process.env.NEXT_PUBLIC_DEFAULT_PLAYLIST_ID;
     fetch('/api/courses')
       .then((r) => r.json())
       .then((data) => {
-        const first: Course | undefined = data.courses?.[0];
-        if (first) {
-          setCourse(first);
-          setActiveLesson(first.lessons[0] ?? null);
+        const courses: Course[] = data.courses ?? [];
+        const preferred = defaultPlaylistId
+          ? (courses.find((c) => c.playlistId === defaultPlaylistId) ?? courses[0])
+          : courses[0];
+        if (preferred) {
+          setCourse(preferred);
+          setActiveLesson(preferred.lessons[0] ?? null);
         }
       })
       .catch(console.error)
